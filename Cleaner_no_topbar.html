@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>System Monitor Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="cleaner-styles.css" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar d-flex flex-column justify-content-between">
+<div>
+<h4 class="text-center">SysMonitor</h4>
+<a class="nav-link active" href="/ComputerHealth/index.html">
+<i class="fa fa-home"></i> Dashboard
+    </a>
+<!-- Original code with dropdown -->
+<div>
+<a class="nav-link nav-link:hover nav-link.active" href="/ComputerHealth/Booster/Booster.html">
+<i class="fa fa-rocket"></i> Booster
+      </a>
+<a class="nav-link active" href="Cleaner.html">
+<i class="fa fa-broom"></i> Cleaner
+      </a>
+</div>
+</div>
+<!-- VPN Button -->
+<div class="vpn-sidebar-btn text-center">
+<button class="btn-vpn" onclick="connectVPN()">Connect to VPN</button>
+</div>
+</div>
+<!-- Main content -->
+<div class="content" style="margin-top: 20px;">
+<div class="submenu-bar mb-4">
+<h2>System Cleaner</h2>
+<p>Optimize your system performance by removing unnecessary files</p>
+</div>
+<div class="cleaner-section">
+<!-- Scanner Section -->
+<div class="scan-container">
+<div class="section-title">SYSTEM SCAN</div>
+<div class="scan-status">
+<div class="status-icon" id="scan-icon">🔍</div>
+<div id="scan-message">Ready to scan your system</div>
+</div>
+<div class="scan-progress-container">
+<div class="progress-bar" id="scan-progress-bar">
+<div class="progress-fill" id="scan-progress-fill" style="width: 0%;"></div>
+</div>
+<div id="scan-progress-text">0%</div>
+</div>
+<div class="scan-results">
+<div class="result-item"><div class="result-icon">🗑️</div><div class="result-details"><div class="result-title">Recycle Bin</div><div class="result-value" id="recycle-size">0 MB</div></div></div>
+<div class="result-item"><div class="result-icon">📁</div><div class="result-details"><div class="result-title">Temporary Files</div><div class="result-value" id="temp-size">0 MB</div></div></div>
+<div class="result-item"><div class="result-icon">🌐</div><div class="result-details"><div class="result-title">Browser Cache</div><div class="result-value" id="cache-size">0 MB</div></div></div>
+<div class="result-item"><div class="result-icon">📦</div><div class="result-details"><div class="result-title">Downloaded Packages</div><div class="result-value" id="packages-size">0 MB</div></div></div>
+</div>
+<div class="total-result">
+<div class="total-title">Total Space to Clean</div>
+<div class="total-value" id="total-size">0 MB</div>
+</div>
+<div class="action-buttons">
+<button class="action-button primary" id="scan-button">Scan Now</button>
+<button class="action-button secondary" disabled="" id="clean-button">Clean Files</button>
+</div>
+</div>
+<!-- Schedule Section -->
+<div class="schedule-container">
+<div class="section-title">SCHEDULE CLEANING</div>
+<div class="schedule-form">
+<div class="form-group">
+<label for="schedule-frequency">Frequency</label>
+<select class="form-control" id="schedule-frequency">
+<option value="once">One Time</option>
+<option value="daily">Daily</option>
+<option value="weekly">Weekly</option>
+<option value="monthly">Monthly</option>
+</select>
+</div>
+<div class="form-group" id="date-group">
+<label for="schedule-date">Date</label>
+<input class="form-control" id="schedule-date" type="date"/>
+</div>
+<div class="form-group">
+<label for="schedule-time">Time</label>
+<input class="form-control" id="schedule-time" type="time"/>
+</div>
+<div class="form-group checkboxes">
+<div class="checkbox-item"><input checked="" id="clean-recycle" type="checkbox"/><label for="clean-recycle">Recycle Bin</label></div>
+<div class="checkbox-item"><input checked="" id="clean-temp" type="checkbox"/><label for="clean-temp">Temporary Files</label></div>
+<div class="checkbox-item"><input checked="" id="clean-cache" type="checkbox"/><label for="clean-cache">Browser Cache</label></div>
+<div class="checkbox-item"><input checked="" id="clean-packages" type="checkbox"/><label for="clean-packages">Downloaded Packages</label></div>
+</div>
+<button class="action-button primary full-width" id="schedule-button">Schedule Cleaning</button>
+</div>
+<div class="scheduled-tasks">
+<div class="section-subtitle">SCHEDULED TASKS</div>
+<div class="no-tasks" id="no-tasks-message">No scheduled cleaning tasks</div>
+<div class="tasks-list" id="tasks-list"></div>
+</div>
+</div>
+</div>
+<div class="cleaner-footer">
+<div class="footer-info">Last cleaned: Never</div>
+<div class="footer-info">Total space recovered: 0 MB</div>
+</div>
+</div>
+<!-- VPN Connection Modal -->
+<div class="vpn-modal d-none" id="vpnModal">
+<div class="vpn-modal-content">
+<div class="vpn-status-icon">🔒</div>
+<h5 id="vpn-status-title">VPN Connected</h5>
+<p id="vpn-status-message">Your connection is now secure. Your IP address and online activities are protected.</p>
+<div class="boost-results">
+<div class="boost-result-item">
+<span>Status:</span>
+<span id="vpn-connection-status">Connected</span>
+</div>
+<div class="boost-result-item">
+<span>Location:</span>
+<span id="vpn-location">United States</span>
+</div>
+<div class="boost-result-item">
+<span>IP Address:</span>
+<span id="vpn-ip">192.168.xx.xx</span>
+</div>
+</div>
+<button class="action-button primary" onclick="closeVpnModal()">OK</button>
+</div>
+</div>
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<script src="cleaner-script.js"></script>
+</body>
+</html>
